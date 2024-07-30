@@ -1,0 +1,25 @@
+import os
+import shutil
+
+def organize_files(directory):
+    if not os.path.isdir(directory):
+        print(f"{directory} is not a valid directory")
+        return
+    files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
+    file_types = {}
+
+    for file in files:
+        file_extension = file.split('.')[-1]
+        if file_extension not in file_types:
+            file_type_dir = os.path.join(directory, file_extension.upper() + 's')
+            if not os.path.exists(file_type_dir):
+                os.makedirs(file_type_dir)
+            file_types[file_extension] = file_type_dir
+
+        shutil.move(os.path.join(directory, file), os.path.join(file_types[file_extension], file))
+
+    print(f"Files organized in {directory}")
+
+if __name__ == '__main__':
+    target_directory = input("Enter the path of the directory to organize: ")
+    organize_files(target_directory)
